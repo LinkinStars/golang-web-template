@@ -1,0 +1,31 @@
+# web服务相关配置
+server_config:
+  # web端口
+  http_port: "8080"
+
+
+# 数据库配置  
+mysql_config:
+  # mysql连接
+  connection: "root:1qaz2wsx@(127.0.0.1:3306)/golang_web_template?charset=utf8"
+  # 最大空闲数
+  max_idel: 5
+  # 最大连接数
+  max_open: 10
+
+
+# 缓存配置
+redis_config:
+  connection: "127.0.0.1:6379"
+
+
+# 日志配置
+logger_config:
+  # 日志打印等级，[debug, info, warn, err, off]
+  level: "debug"
+  # 日志存放路径，当前目录的log文件夹
+  path: "log"
+  # 最大存放时间，7天，超过7天的日志会删除
+  max_age: 7
+  # 日志分割时间，24小时，日志以1天为单位分割，一天一个文件
+  rotation_time: 24
