@@ -18,7 +18,7 @@ func main() {
 	s := c.Server
 
 	// 初始化日志
-	logger.InitLogger("golang-web-template", l.Path, l.MaxAge, l.RotationTime, l.Level)
+	logger.InitLogger("golang-web-template", l.Level, l.Path, l.MaxAge, l.RotationTime)
 	logger.Debug("debug日志")
 	logger.Info("info日志")
 	logger.Warn("warn日志")

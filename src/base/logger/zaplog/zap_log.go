@@ -13,7 +13,7 @@ import (
 	"go.uber.org/zap/zapcore"
 )
 
-var yourProjectName = "golang-web-template"
+var YourProjectName = "golang-web-template"
 
 // projectName: 项目名称
 // logPath: 日志打印目录
@@ -21,7 +21,7 @@ var yourProjectName = "golang-web-template"
 // rotationTime: 日志切分时间，单位：小时
 func InitZap(projectName, logPath string, maxAge, rotationTime time.Duration) {
 	if len(projectName) != 0 {
-		yourProjectName = projectName
+		YourProjectName = projectName
 	}
 
 	maxAge = maxAge * 24 * time.Hour
@@ -101,11 +101,11 @@ func InitZap(projectName, logPath string, maxAge, rotationTime time.Duration) {
 // 自定义打印路径，减少输出日志打印路径长度，根据输入项目名进行减少
 func customCallerEncoder(caller zapcore.EntryCaller, enc zapcore.PrimitiveArrayEncoder) {
 	str := caller.String()
-	index := strings.Index(str, yourProjectName)
+	index := strings.Index(str, YourProjectName)
 	if index == -1 {
 		enc.AppendString(caller.FullPath())
 	} else {
-		index = index + len(yourProjectName) + 1
+		index = index + len(YourProjectName) + 1
 		enc.AppendString(str[index:])
 	}
 }

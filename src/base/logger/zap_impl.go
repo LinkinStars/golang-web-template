@@ -1,6 +1,10 @@
 package logger
 
 import (
+	"bytes"
+	"fmt"
+	"runtime"
+	"strings"
 	"time"
 
 	"go.uber.org/zap"
@@ -12,7 +16,7 @@ var myLogger *ZapLogger
 var levelMapping = levelMap()
 
 // 初始化日志框架
-func InitLogger(projectName, logPath string, maxAge, rotationTime time.Duration, level string) {
+func InitLogger(projectName, level, logPath string, maxAge, rotationTime time.Duration) {
 	zaplog.InitZap(projectName, logPath, maxAge, rotationTime)
 	// 设置打印堆栈深度，设置日志级别
 	myLogger = &ZapLogger{
@@ -118,4 +122,27 @@ func (z *ZapLogger) Level() LogLevel {
 
 func (z *ZapLogger) SetLevel(l LogLevel) {
 	z.level = l
+}
+
+// 返回当前调用堆栈信息
+// start 起始调用栈层级
+// end 结束调用栈层级 输入0则会添加调用栈信息直到没有
+func LogStack(start, end int) string {
+	stack := bytes.Buffer{}
+	for i := start; i < end || end == 0; i++ {
+		pc, str, line, _ := runtime.Caller(i)
+		if line == 0 {
+			break
+		}
+
+		// 根据项目名称截短输出路径
+		projectName := zaplog.YourProjectName
+		index := strings.Index(str, projectName)
+		if index != -1 {
+			index = index + len(projectName) + 1
+			str = str[index:]
+		}
+		stack.WriteString(fmt.Sprintf("%s:%d %s\n", str, line, runtime.FuncForPC(pc).Name()))
+	}
+	return stack.String()
 }

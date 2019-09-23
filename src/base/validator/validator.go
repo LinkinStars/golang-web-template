@@ -58,10 +58,10 @@ func (m *MyValidator) Check(value interface{}) error {
 		// 将所有的参数错误进行翻译然后拼装成字符串返回
 		errBuf := bytes.Buffer{}
 		for i := 0; i < len(errs); i++ {
-			errBuf.WriteString(errs[i].Translate(m.Trans) + "\n ")
+			errBuf.WriteString(errs[i].Translate(m.Trans) + " \n")
 		}
 
-		// 删除掉最后一个换行符和空格
+		// 删除掉最后一个空格和换行符
 		errStr := errBuf.String()
 		return errors.New(errStr[:len(errStr)-2])
 	}

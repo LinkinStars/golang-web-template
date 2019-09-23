@@ -29,6 +29,13 @@ type UpdateUserReq struct {
 	Age      int    `validate:"required,min=5,max=99" comment:"年龄"`
 }
 
+type GetUsersReq struct {
+	PageNum  int    `validate:"required,min=1" comment:"页码"`
+	PageSize int    `validate:"required,min=1" comment:"分页大小"`
+	Username string `validate:"required,gt=6,lt=16" comment:"用户名"`
+	Age      int    `validate:"required,min=5,max=99" comment:"年龄"`
+}
+
 type GetUserResponse struct {
 	Id       int    `json:"id"`
 	Username string `json:"username"`

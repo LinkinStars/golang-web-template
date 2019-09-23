@@ -1,13 +1,12 @@
 package pager
 
 import (
-	"errors"
 	"reflect"
 )
 
 // 分页模型
 type PageModel struct {
-	Page         int         `json:"page"`
+	PageNum      int         `json:"page_num"`
 	PageSize     int         `json:"page_size"`
 	TotalPages   int64       `json:"total_pages"`
 	TotalRecords int64       `json:"total_records"`
@@ -15,30 +14,30 @@ type PageModel struct {
 }
 
 // 构造分页对象
-// page: 当前页码
+// pageNum: 当前页码，从1开始
 // pageSize: 每页条数
 // totalRecords: 总条数
 // records: 分页数据，必须为slice，不能为nil或者其他对象，可以是空的slice
-func NewPageModel(page, pageSize int, totalRecords int64, records interface{}) *PageModel {
+func NewPageModel(pageNum, pageSize int, totalRecords int64, records interface{}) *PageModel {
 	sliceValue := reflect.Indirect(reflect.ValueOf(records))
 	if sliceValue.Kind() != reflect.Slice {
 		panic("分页异常，需要传入一个slice类型")
 	}
-
-	if page <= 0 {
-		page = 1
-	}
 	if pageSize <= 0 {
-		pageSize = 10
+		panic("分页异常，每页条数必须为正数")
+	}
+
+	if pageNum <= 0 {
+		pageNum = 1
 	}
 	if totalRecords < 0 {
 		totalRecords = 0
 	}
 
-	totalPages, _ := calcTotalPages(int64(pageSize), totalRecords)
+	totalPages := calcTotalPages(int64(pageSize), totalRecords)
 
 	return &PageModel{
-		Page:         page,
+		PageNum:      pageNum,
 		PageSize:     pageSize,
 		TotalPages:   totalPages,
 		TotalRecords: totalRecords,
@@ -47,17 +46,9 @@ func NewPageModel(page, pageSize int, totalRecords int64, records interface{}) *
 }
 
 // 计算页码逻辑
-func calcTotalPages(pageSize, totalRecords int64) (totalPages int64, err error) {
-	if pageSize <= 0 {
-		return 0, errors.New("page size should be positive integer")
-	}
-
-	if totalRecords < 0 {
-		return 0, errors.New("total records should not be negative integer")
-	}
-
+func calcTotalPages(pageSize, totalRecords int64) (totalPages int64) {
 	if totalRecords == 0 {
-		return 0, nil
+		return 0
 	}
 
 	if totalRecords%pageSize == 0 {
@@ -65,5 +56,5 @@ func calcTotalPages(pageSize, totalRecords int64) (totalPages int64, err error) 
 	} else {
 		totalPages = totalRecords/pageSize + 1
 	}
-	return totalPages, nil
+	return totalPages
 }

@@ -65,8 +65,8 @@ func UpdateUser(ctx *gin.Context) {
 	httper.HandleResponse(ctx, err, nil)
 }
 
-// @Summary 查询用户
-// @Description 查询用户
+// @Summary 根据id查询用户
+// @Description 根据id查询用户
 // @Tags User
 // @Accept  json
 // @Produce  json
@@ -79,6 +79,25 @@ func GetUser(ctx *gin.Context) {
 		httper.HandleResponse(ctx, errors.New("参数错误"), nil)
 		return
 	}
+
 	u, err := service.GetUser(id)
 	httper.HandleResponse(ctx, err, u)
+}
+
+// @Summary 分页查询用户
+// @Description 分页查询用户
+// @Tags User
+// @Accept  json
+// @Produce  json
+// @Param data body val.UpdateUserReq true "分页用户条件信息"
+// @Success 200 {object} val.GetUsersReq
+// @Router /users [get]
+func ListUser(ctx *gin.Context) {
+	getUsersReq := &val.GetUsersReq{}
+	if httper.BindAndCheck(ctx, getUsersReq) {
+		return
+	}
+
+	pageModel, err := service.ListUser(getUsersReq)
+	httper.HandleResponse(ctx, err, pageModel)
 }
