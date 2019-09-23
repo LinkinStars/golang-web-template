@@ -34,7 +34,7 @@ func InitRouter(port string) {
 	// id查询单用户
 	r.GET("/gwt/api/v1/user/:id", controller.GetUser)
 	// 多条件分页查询
-	r.POST("/gwt/api/v1/users")
+	r.POST("/gwt/api/v1/users", controller.ListUser)
 
 	// swagger
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))

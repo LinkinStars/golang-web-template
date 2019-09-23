@@ -49,7 +49,7 @@ func GetUser(id int) (u *model.User, err error) {
 // 根据查询条件分页用户
 func ListUser(page, pageSize int, username string, age int) (pageModel *pager.PageModel, err error) {
 	// 设置查询条件
-	session := db.DataEngine.Where("username LIKE ?", username+"%").And("age > ?", age)
+	session := db.DataEngine.Where("username LIKE ?", username+"%").And("age > ?", age).OrderBy("id")
 
 	// 进行分页查询
 	users := &[]model.User{}
