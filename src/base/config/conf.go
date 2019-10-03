@@ -7,10 +7,10 @@ import (
 	"github.com/spf13/viper"
 )
 
-// 全局配置索引
-var GlobalConfig *config
+// All 全部配置索引
+var All *AllConfig
 
-// 初始化读取配置文件
+// InitConfig 初始化读取配置文件
 func InitConfig(path string) {
 	configVip := viper.New()
 	configVip.SetConfigFile(path)
@@ -21,39 +21,44 @@ func InitConfig(path string) {
 	}
 
 	// 配置映射到结构体
-	GlobalConfig = &config{}
-	if err := configVip.Unmarshal(GlobalConfig); err != nil {
+	All = &AllConfig{}
+	if err := configVip.Unmarshal(All); err != nil {
 		panic(err)
 	}
 
 	// 这里可以做检查，如果配置文件相关配置项异常亦可以不启动
-	fmt.Printf("当前读取到配置文件：\n%+v\n", *GlobalConfig)
+	fmt.Printf("当前读取到配置文件：\n%+v\n", *All)
 }
 
-type config struct {
-	Server serverConfig `mapstructure:"server_config"`
-	Logger loggerConfig `mapstructure:"logger_config"`
-	Mysql  mysqlConfig  `mapstructure:"mysql_config"`
-	Redis  redisConfig  `mapstructure:"redis_config"`
+// AllConfig 全部配置文件
+type AllConfig struct {
+	Server ServerConfig `mapstructure:"server_config"`
+	Logger LoggerConfig `mapstructure:"logger_config"`
+	Mysql  MysqlConfig  `mapstructure:"mysql_config"`
+	Redis  RedisConfig  `mapstructure:"redis_config"`
 }
 
-type serverConfig struct {
+// ServerConfig 服务配置
+type ServerConfig struct {
 	HttpPort string `mapstructure:"http_port"`
 }
 
-type loggerConfig struct {
+// LoggerConfig 日志配置
+type LoggerConfig struct {
 	Level        string        `mapstructure:"level"`
 	Path         string        `mapstructure:"path"`
 	MaxAge       time.Duration `mapstructure:"max_age"`
 	RotationTime time.Duration `mapstructure:"rotation_time"`
 }
 
-type mysqlConfig struct {
+// MysqlConfig 数据库配置
+type MysqlConfig struct {
 	Connection string `mapstructure:"connection"`
 	MaxIdle    int    `mapstructure:"max_idel"`
 	MaxOpen    int    `mapstructure:"max_open"`
 }
 
-type redisConfig struct {
+// RedisConfig 缓存配置
+type RedisConfig struct {
 	Connection string `mapstructure:"connection"`
 }
