@@ -1,15 +1,15 @@
 package db
 
 import (
-	_ "github.com/go-sql-driver/mysql"
 	"github.com/go-xorm/xorm"
 	"xorm.io/core"
 )
 
-var DataEngine *xorm.Engine
+// Engine 全局数据引擎
+var Engine *xorm.Engine
 
-// 初始化数据库
-func InitDB(path string, maxIdel, maxOpen int) {
+// InitDB 初始化数据库
+func InitDB(path string, maxIdle, maxOpen int) {
 	// 创建数据库连接
 	engine, err := xorm.NewEngine("mysql", path)
 	if err != nil {
@@ -25,8 +25,8 @@ func InitDB(path string, maxIdel, maxOpen int) {
 	engine.ShowSQL(true)
 
 	// 配置数据库相关信息
-	engine.SetMaxIdleConns(maxIdel)
+	engine.SetMaxIdleConns(maxIdle)
 	engine.SetMaxOpenConns(maxOpen)
-	engine.SetColumnMapper(core.SameMapper{})
-	DataEngine = engine
+	engine.SetColumnMapper(core.GonicMapper{})
+	Engine = engine
 }
