@@ -4,26 +4,38 @@ import (
 	"time"
 
 	"go.uber.org/zap"
-
-	"base/logger/zaplog"
 )
 
-var myLogger *ZapLogger
+// myLogger 日志内部实现
+var myLogger *zapLogger
+
+// levelMapping 日志级别的映射关系
 var levelMapping = levelMap()
 
-// 初始化日志框架
-func InitLogger(projectName, logPath string, maxAge, rotationTime time.Duration, level string) {
-	zaplog.InitZap(projectName, logPath, maxAge, rotationTime)
+// logLevel 日志级别
+type logLevel int
+
+const (
+	logDebug logLevel = iota
+	logInfo
+	logWarn
+	logErr
+	logOff
+)
+
+// InitLogger 初始化日志Logger
+func InitLogger(level, projectName, logPath string, maxAge, rotationTime time.Duration) {
+	initZap(projectName, logPath, maxAge, rotationTime)
 	// 设置打印堆栈深度，设置日志级别
-	myLogger = &ZapLogger{
+	myLogger = &zapLogger{
 		slog:  zap.L().WithOptions(zap.AddCallerSkip(2)).Sugar(),
 		level: levelMapping[level],
 	}
 }
 
-// 字符串和级别映射
-func levelMap() map[string]LogLevel {
-	return map[string]LogLevel{
+// levelMap 字符串和级别映射
+func levelMap() map[string]logLevel {
+	return map[string]logLevel{
 		"debug": logDebug,
 		"info":  logInfo,
 		"warn":  logWarn,
@@ -32,90 +44,64 @@ func levelMap() map[string]LogLevel {
 	}
 }
 
-// 外部直接调用方法就可以，简化调用方式
-func Debug(v ...interface{}) {
-	myLogger.Debug(v...)
-}
-func Debugf(format string, v ...interface{}) {
-	myLogger.Debugf(format, v...)
-}
-func Info(v ...interface{}) {
-	myLogger.Info(v...)
-}
-func Infof(format string, v ...interface{}) {
-	myLogger.Infof(format, v...)
-}
-func Warn(v ...interface{}) {
-	myLogger.Warn(v...)
-}
-func Warnf(format string, v ...interface{}) {
-	myLogger.Warnf(format, v...)
-}
-func Error(v ...interface{}) {
-	myLogger.Error(v...)
-}
-func Errorf(format string, v ...interface{}) {
-	myLogger.Errorf(format, v...)
-}
-
-// 具体对内实现
-type ZapLogger struct {
+// zapLogger 具体对内实现
+type zapLogger struct {
 	slog  *zap.SugaredLogger
-	level LogLevel
+	level logLevel
 }
 
-func (z *ZapLogger) Debug(v ...interface{}) {
-	if z.Level() <= logDebug {
+// Debug log
+func (z *zapLogger) Debug(v ...interface{}) {
+	if z.level <= logDebug {
 		z.slog.Debug(v...)
 	}
 }
 
-func (z *ZapLogger) Debugf(format string, v ...interface{}) {
-	if z.Level() <= logDebug {
+// Debugf log
+func (z *zapLogger) Debugf(format string, v ...interface{}) {
+	if z.level <= logDebug {
 		z.slog.Debugf(format, v...)
 	}
 }
 
-func (z *ZapLogger) Info(v ...interface{}) {
-	if z.Level() <= logInfo {
+// Info log
+func (z *zapLogger) Info(v ...interface{}) {
+	if z.level <= logInfo {
 		z.slog.Info(v...)
 	}
 }
 
-func (z *ZapLogger) Infof(format string, v ...interface{}) {
-	if z.Level() <= logInfo {
+// Infof log
+func (z *zapLogger) Infof(format string, v ...interface{}) {
+	if z.level <= logInfo {
 		z.slog.Infof(format, v...)
 	}
 }
 
-func (z *ZapLogger) Warn(v ...interface{}) {
-	if z.Level() <= logWarn {
+// Warn log
+func (z *zapLogger) Warn(v ...interface{}) {
+	if z.level <= logWarn {
 		z.slog.Warn(v...)
 	}
 }
 
-func (z *ZapLogger) Warnf(format string, v ...interface{}) {
-	if z.Level() <= logWarn {
+// Warnf log
+func (z *zapLogger) Warnf(format string, v ...interface{}) {
+	if z.level <= logWarn {
 		z.slog.Warnf(format, v...)
 	}
 }
 
-func (z *ZapLogger) Error(v ...interface{}) {
-	if z.Level() <= logErr {
+// Error log
+func (z *zapLogger) Error(v ...interface{}) {
+	if z.level <= logErr {
 		z.slog.Error(v...)
 	}
 }
 
-func (z *ZapLogger) Errorf(format string, v ...interface{}) {
-	if z.Level() <= logErr {
+// Errorf log
+func (z *zapLogger) Errorf(format string, v ...interface{}) {
+	if z.level <= logErr {
 		z.slog.Errorf(format, v)
 	}
-}
-
-func (z *ZapLogger) Level() LogLevel {
-	return z.level
-}
-
-func (z *ZapLogger) SetLevel(l LogLevel) {
-	z.level = l
 }

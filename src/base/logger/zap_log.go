@@ -1,5 +1,5 @@
 // Copyright 2019 LinkinStar
-package zaplog
+package logger
 
 import (
 	"os"
@@ -13,13 +13,15 @@ import (
 	"go.uber.org/zap/zapcore"
 )
 
+// yourProjectName 你的项目名称，用于命名打印日志名字和截短日志输出目录
 var yourProjectName = "golang-web-template"
 
+// initZap 初始化zap日志配置
 // projectName: 项目名称
 // logPath: 日志打印目录
 // maxAge: 日志最大存在时间，单位：天
 // rotationTime: 日志切分时间，单位：小时
-func InitZap(projectName, logPath string, maxAge, rotationTime time.Duration) {
+func initZap(projectName, logPath string, maxAge, rotationTime time.Duration) {
 	if len(projectName) != 0 {
 		yourProjectName = projectName
 	}
@@ -98,7 +100,7 @@ func InitZap(projectName, logPath string, maxAge, rotationTime time.Duration) {
 	}
 }
 
-// 自定义打印路径，减少输出日志打印路径长度，根据输入项目名进行减少
+// customCallerEncoder 自定义打印路径，减少输出日志打印路径长度，根据输入项目名进行减少
 func customCallerEncoder(caller zapcore.EntryCaller, enc zapcore.PrimitiveArrayEncoder) {
 	str := caller.String()
 	index := strings.Index(str, yourProjectName)
@@ -110,7 +112,7 @@ func customCallerEncoder(caller zapcore.EntryCaller, enc zapcore.PrimitiveArrayE
 	}
 }
 
-// 格式化日志时间，官方的不好看
+// timeEncoder 格式化日志时间，官方的不好看
 func timeEncoder(t time.Time, enc zapcore.PrimitiveArrayEncoder) {
 	enc.AppendString(t.Format("2006-01-02 15:04:05.000"))
 }
