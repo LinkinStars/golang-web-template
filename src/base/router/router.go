@@ -24,10 +24,11 @@ func InitRouter(port string) {
 	r.Use(ginzap.Ginzap(zap.L(), "2006-01-02 15:04:05.000", false))
 
 	r.POST("/gwt/api/v1/user", controller.AddUser)
-	r.DELETE("/gwt/api/v1/user", controller.DeleteUser)
+	r.DELETE("/gwt/api/v1/user", controller.RemoveUser)
 	r.PUT("/gwt/api/v1/user", controller.UpdateUser)
 	r.GET("/gwt/api/v1/user/:id", controller.GetUser)
-	r.POST("/gwt/api/v1/users")
+	r.GET("/gwt/api/v1/users", controller.GetUsers)
+	r.GET("/gwt/api/v1/users/page", controller.GetUsersPage)
 
 	// swagger
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))

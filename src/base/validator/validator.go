@@ -11,14 +11,16 @@ import (
 	"gopkg.in/go-playground/validator.v9/translations/zh"
 )
 
+// MyValidator 自定义验证器
 type MyValidator struct {
 	Validate *validator.Validate
 	Trans    ut.Translator
 }
 
-var GlobalValidate MyValidator
+// GlobalValidator 全局验证器
+var GlobalValidator MyValidator
 
-// 初始化验证器
+// InitValidator 初始化验证器
 func InitValidator() {
 	zhs := zhongwen.New()
 	uni := ut.New(zhs, zhs)
@@ -40,11 +42,11 @@ func InitValidator() {
 		panic(err)
 	}
 
-	GlobalValidate.Validate = validate
-	GlobalValidate.Trans = trans
+	GlobalValidator.Validate = validate
+	GlobalValidator.Trans = trans
 }
 
-// 验证器通用验证方法
+// Check 验证器通用验证方法
 func (m *MyValidator) Check(value interface{}) error {
 	// 首先使用validator.v9进行验证
 	err := m.Validate.Struct(value)
@@ -67,16 +69,13 @@ func (m *MyValidator) Check(value interface{}) error {
 	}
 
 	// 如果它实现了CanCheck接口，就进行自定义验证
-	if reflect.TypeOf(value).Implements(canCheckType) {
-		return value.(CanCheck).Check()
+	if v, ok := value.(CanCheck); ok {
+		return v.Check()
 	}
 	return nil
 }
 
-// CanCheck接口类型，用于判断是否实现该接口
-var canCheckType = reflect.TypeOf(new(CanCheck)).Elem()
-
-// 如果需要特殊校验，可以实现验证接口，或者通过自定义tag标签实现
+// CanCheck 如果需要特殊校验，可以实现验证接口，或者通过自定义tag标签实现
 type CanCheck interface {
 	Check() error
 }

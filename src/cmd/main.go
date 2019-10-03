@@ -1,6 +1,8 @@
 package main
 
 import (
+	_ "github.com/go-sql-driver/mysql"
+
 	"base/config"
 	"base/db"
 	"base/logger"
@@ -12,13 +14,13 @@ func main() {
 	// 读取配置文件
 	config.InitConfig("./default-conf.yml")
 
-	c := config.GlobalConfig
-	l := c.Logger
-	m := c.Mysql
-	s := c.Server
+	all := config.All
+	l := all.Logger
+	m := all.Mysql
+	s := all.Server
 
 	// 初始化日志
-	logger.InitLogger("golang-web-template", l.Path, l.MaxAge, l.RotationTime, l.Level)
+	logger.InitLogger(l.Level, "golang-web-template", l.Path, l.MaxAge, l.RotationTime)
 	logger.Debug("debug日志")
 	logger.Info("info日志")
 	logger.Warn("warn日志")
@@ -27,12 +29,12 @@ func main() {
 	// 初始化数据库
 	db.InitDB(m.Connection, m.MaxIdle, m.MaxOpen)
 
-	// 初始化redis
+	// 初始化redis ...
 
 	// 初始化验证器
 	validator.InitValidator()
 
-	// 初始化pprof
+	// 初始化pprof ...
 
 	// 初始化路由
 	router.InitRouter(s.HttpPort)
