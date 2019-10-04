@@ -9,10 +9,10 @@ import (
 
 // PageModel 分页模型
 type PageModel struct {
-	PageNum      int         `json:"pageNum"`
-	PageSize     int         `json:"pageSize"`
-	TotalPages   int64       `json:"totalPages"`
-	TotalRecords int64       `json:"totalRecords"`
+	PageNum      int         `json:"page_num"`
+	PageSize     int         `json:"page_size"`
+	TotalPages   int64       `json:"total_pages"`
+	TotalRecords int64       `json:"total_records"`
 	Records      interface{} `json:"records"`
 }
 

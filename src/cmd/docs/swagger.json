@@ -1,0 +1,418 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "golang-web-template 接口文档",
+        "contact": {},
+        "license": {},
+        "version": "1.0"
+    },
+    "host": "localhost:8080",
+    "basePath": "/gwt/api/v1",
+    "paths": {
+        "/user": {
+            "put": {
+                "description": "修改用户",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "修改用户",
+                "parameters": [
+                    {
+                        "description": "用户",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/val.UpdateUserReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/api.BaseRespBody"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "新增用户",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "新增用户",
+                "parameters": [
+                    {
+                        "description": "用户",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/val.AddUserReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/api.BaseRespBody"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "删除用户",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "删除用户",
+                "parameters": [
+                    {
+                        "description": "用户",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/val.DeleteUserReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/api.BaseRespBody"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/{id}": {
+            "get": {
+                "description": "查询用户 单个",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "查询用户 单个",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "用户id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/api.GetUserRespAPI"
+                        }
+                    }
+                }
+            }
+        },
+        "/users": {
+            "get": {
+                "description": "查询用户 列表",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "查询用户 列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "用户名",
+                        "name": "username",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "昵称",
+                        "name": "nickname",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "年龄",
+                        "name": "age",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/api.GetUsersRespAPI"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/page": {
+            "get": {
+                "description": "查询用户 分页",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "查询用户 分页",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "页码",
+                        "name": "page_num",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "每页大小",
+                        "name": "page_size",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "用户名",
+                        "name": "username",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "昵称",
+                        "name": "nickname",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "年龄",
+                        "name": "age",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/api.GetUsersWithPageAPI"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "api.BaseRespBody": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "返回码",
+                    "type": "integer"
+                },
+                "data": {
+                    "description": "数据",
+                    "type": "object"
+                },
+                "message": {
+                    "description": "返回信息",
+                    "type": "string"
+                }
+            }
+        },
+        "api.GetUserRespAPI": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "返回码",
+                    "type": "integer"
+                },
+                "data": {
+                    "description": "内容",
+                    "type": "object",
+                    "$ref": "#/definitions/val.GetUserResp"
+                },
+                "message": {
+                    "description": "返回信息",
+                    "type": "string"
+                }
+            }
+        },
+        "api.GetUsersRespAPI": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "返回码",
+                    "type": "integer"
+                },
+                "data": {
+                    "description": "内容",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/val.GetUserResp"
+                    }
+                },
+                "message": {
+                    "description": "返回信息",
+                    "type": "string"
+                }
+            }
+        },
+        "api.GetUsersWithPageAPI": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "返回码",
+                    "type": "integer"
+                },
+                "content": {
+                    "description": "内容",
+                    "type": "object",
+                    "$ref": "#/definitions/api.UsersPageModelAPI"
+                },
+                "message": {
+                    "description": "返回信息",
+                    "type": "string"
+                }
+            }
+        },
+        "api.UsersPageModelAPI": {
+            "type": "object",
+            "properties": {
+                "page_num": {
+                    "description": "页码",
+                    "type": "integer"
+                },
+                "page_size": {
+                    "description": "每页大小",
+                    "type": "integer"
+                },
+                "records": {
+                    "description": "数据",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/val.GetUserResp"
+                    }
+                },
+                "total_pages": {
+                    "description": "总页数",
+                    "type": "integer"
+                },
+                "total_records": {
+                    "description": "总记录条数",
+                    "type": "integer"
+                }
+            }
+        },
+        "val.AddUserReq": {
+            "type": "object",
+            "required": [
+                "age",
+                "username"
+            ],
+            "properties": {
+                "age": {
+                    "description": "年龄",
+                    "type": "integer"
+                },
+                "nickname": {
+                    "description": "昵称",
+                    "type": "string"
+                },
+                "username": {
+                    "description": "用户名",
+                    "type": "string"
+                }
+            }
+        },
+        "val.DeleteUserReq": {
+            "type": "object",
+            "required": [
+                "id"
+            ],
+            "properties": {
+                "id": {
+                    "description": "用户id",
+                    "type": "integer"
+                }
+            }
+        },
+        "val.GetUserResp": {
+            "type": "object",
+            "properties": {
+                "age": {
+                    "description": "年龄",
+                    "type": "integer"
+                },
+                "id": {
+                    "description": "用户id",
+                    "type": "integer"
+                },
+                "nickname": {
+                    "description": "昵称",
+                    "type": "string"
+                },
+                "username": {
+                    "description": "用户名",
+                    "type": "string"
+                }
+            }
+        },
+        "val.UpdateUserReq": {
+            "type": "object",
+            "required": [
+                "id"
+            ],
+            "properties": {
+                "age": {
+                    "description": "年龄",
+                    "type": "integer"
+                },
+                "id": {
+                    "description": "用户id",
+                    "type": "integer"
+                },
+                "nickname": {
+                    "description": "昵称",
+                    "type": "string"
+                },
+                "username": {
+                    "description": "用户名",
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

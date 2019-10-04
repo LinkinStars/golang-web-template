@@ -3,6 +3,8 @@ package main
 import (
 	_ "github.com/go-sql-driver/mysql"
 
+	_ "cmd/docs"
+
 	"base/config"
 	"base/db"
 	"base/logger"
@@ -10,9 +12,13 @@ import (
 	"base/validator"
 )
 
+// @title golang-web-template 接口文档
+// @version 1.0
+// @host localhost:8080
+// @BasePath /gwt/api/v1
 func main() {
 	// 读取配置文件
-	config.InitConfig("./default-conf.yml")
+	config.InitConfig("./doc/default-conf.yml")
 
 	all := config.All
 	l := all.Logger

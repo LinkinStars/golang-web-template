@@ -23,10 +23,12 @@ func HandleResponse(c *gin.Context, err error, data interface{}) {
 	// 针对不同的错误类型进行处理
 	switch errors.Cause(err).(type) {
 	case *myerr.ParameterError:
+		// 如果只是参数错误 返回400 并将错误信息直接返回展示
 		SendFailResp(c, http.StatusBadRequest, err.Error())
 	default:
+		// 服务端出现未定义的异常 返回500 并打印日志
 		logStackInfo(err)
-		SendFailResp(c, http.StatusInternalServerError, err.Error())
+		SendFailResp(c, http.StatusInternalServerError, "服务端异常")
 	}
 
 	return

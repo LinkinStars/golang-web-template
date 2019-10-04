@@ -74,7 +74,7 @@ func UpdateUser(ctx *gin.Context) {
 // @Tags User
 // @Produce  json
 // @Param id path int true "用户id"
-// @Success 200 {object} api.GetUserResp
+// @Success 200 {object} api.GetUserRespAPI
 // @Router /user/{id} [get]
 func GetUser(ctx *gin.Context) {
 	id, _ := strconv.Atoi(ctx.Param("id"))
@@ -83,8 +83,8 @@ func GetUser(ctx *gin.Context) {
 		return
 	}
 
-	u, err := service.GetUser(id)
-	httper.HandleResponse(ctx, err, u)
+	user, err := service.GetUser(id)
+	httper.HandleResponse(ctx, err, user)
 }
 
 // GetUsers 查询用户 列表
@@ -92,8 +92,10 @@ func GetUser(ctx *gin.Context) {
 // @Description 查询用户 列表
 // @Tags User
 // @Produce  json
-// @Param data body val.GetUsersReq true "用户查询条件"
-// @Success 200 {object} api.GetUsersResp
+// @Param username query string false "用户名"
+// @Param nickname query string false "昵称"
+// @Param age query string false "年龄"
+// @Success 200 {object} api.GetUsersRespAPI
 // @Router /users [get]
 func GetUsers(ctx *gin.Context) {
 	getUsersReq := &val.GetUsersReq{}
@@ -110,8 +112,12 @@ func GetUsers(ctx *gin.Context) {
 // @Description 查询用户 分页
 // @Tags User
 // @Produce  json
-// @Param data body val.GetUsersWithPageReq true "用户查询条件"
-// @Success 200 {object} api.GetUsersWithPageReq
+// @Param page_num query string true "页码"
+// @Param page_size query string true "每页大小"
+// @Param username query string false "用户名"
+// @Param nickname query string false "昵称"
+// @Param age query string false "年龄"
+// @Success 200 {object} api.GetUsersWithPageAPI
 // @Router /users/page [get]
 func GetUsersPage(ctx *gin.Context) {
 	getUsersWithPageReq := &val.GetUsersWithPageReq{}
