@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
-swag init -g ./src/cmd/main.go -o ./src/cmd/docs
-swagger serve ./src/cmd/docs/swagger.yaml
+swag init -g ./cmd/main.go -o ./cmd/docs
+swagger serve ./cmd/docs/swagger.yaml

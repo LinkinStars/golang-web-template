@@ -16,7 +16,7 @@ PS： 如果其中有写的不好的地方，或者有可以优化的地方也�
 - pkg/errors 错误处理
 - swagger 接口文档
 
-使用时需要设置项目 GOPATH 为当前项目根目录，后续才会引入 go mod
+使用时需要设置项目 GOPATH 为当前项目根目录，当前依赖使用govendor，后续等13普及会引入go mod
 
 ## 项目说明
 ### 目录说明
@@ -69,7 +69,7 @@ PS： 如果其中有写的不好的地方，或者有可以优化的地方也�
 https://github.com/go-swagger/go-swagger/ 
 https://github.com/swaggo/swag
 - 使用之前需要安装 go get -u github.com/swaggo/swag/cmd/swag 相关的库，查看上面两个库中的说明进行安装即可
-- 使用命令 `swag init -g ./src/cmd/main.go -o ./src/cmd/docs` 会生成对应的接口文档json,yml到对应位置
-- 使用命令 `swagger serve ./src/cmd/docs/swagger.yaml` 会在本地启动接口文档的服务进行查看
+- 在根目录使用命令 `swag init -g ./cmd/main.go -o ./cmd/docs` 会生成对应的接口文档json,yml到对应位置
+- 在根目录使用命令 `swagger serve ./cmd/docs/swagger.yaml` 会在本地启动接口文档的服务进行查看
 - 生成文档的时候会生成一个docs.go文件，在启动的main.go上面已经有了这个文件的依赖，所以直接启动项目访问：http://localhost:8080/swagger/index.html   也可以看到接口文档，并且可以直接使用其中的try进行测试
-- 生成的命令记录在脚本 gen-swagger-doc.sh 中
+- 生成的命令记录在脚本 gen-swagger-doc.sh 中，也可以直接运行脚本查看接口文档
