@@ -1,0 +1,9 @@
+server:
+  http:
+    addr: 0.0.0.0:8080
+data:
+  database:
+    connection: root:1qaz2wsx@tcp(127.0.0.1:3306)/test
+    conn_max_life_time: 1
+  redis:
+    addr: 127.0.0.1:6379
